@@ -17,9 +17,12 @@ class UserSerializer(serializers.ModelSerializer):
                     'password': "Password doesn't match"
                 }
             )
-        user = User(email=self.validated_data.get('email'),
-                    username=self.validated_data.get('username')
-        )
+        user = User(
+                email=self.validated_data.get('email'),
+                username=self.validated_data.get('username')
+                )
+        
+        
         user.set_password(self.validated_data.get('password'))
         user.save()
         return user

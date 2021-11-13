@@ -1,9 +1,10 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
 from .serializers import UserSerializer
 
 @api_view(['POST'])
+@permission_classes([])
 def signup(req):
     data = {'data':'','status':''}
     user_serialized = UserSerializer(data=req.data)
@@ -13,7 +14,7 @@ def signup(req):
         data['data'] = {
             'user':{
                 'email':user_serialized.data.get('email'),
-                'username':user_serialized.data.get('username'),
+                'username':user_serialized.data.get('username')
                 },
             'message':'Created'
         }

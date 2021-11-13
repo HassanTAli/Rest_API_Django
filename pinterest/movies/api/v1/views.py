@@ -11,7 +11,7 @@ from .serializers import MovieSerializer
 
 @api_view(['GET'])
 # @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def hello(req,mykey):
     data = {'message':'Hell from rest api yor key is {}'.format(mykey)}
     if mykey == 'yes':
