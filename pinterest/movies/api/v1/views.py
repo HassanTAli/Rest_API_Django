@@ -2,7 +2,7 @@ from django.http import response
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from movies.models import Movie
 from .serializers import MovieSerializer
 # from rest_framework.decorators import authentication_classes
@@ -10,6 +10,7 @@ from .serializers import MovieSerializer
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 # @authentication_classes([TokenAuthentication])
 # @permission_classes([IsAuthenticated])
 def hello(req,mykey):
