@@ -2,13 +2,19 @@ from django.http import response
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, BasePermission
 from movies.models import Movie
 from .serializers import MovieSerializer
 # from rest_framework.decorators import authentication_classes
 # from rest_framework.authentication import TokenAuthentication
 
-
+class UserCanDeleteMovie(BasePermission):
+    
+    def has_permission(self, request, view):
+        if request.user.groups.filter(name='Can-Delete').exists():
+            return True
+        return False
+    
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 # @authentication_classes([TokenAuthentication])
@@ -21,8 +27,6 @@ def hello(req,mykey):
         return Response(data=data,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-
 def movie_list(req):
     movies = Movie.objects.all()
     serializer_Movie = MovieSerializer(instance=movies,many=True)
@@ -30,7 +34,6 @@ def movie_list(req):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
 def movie_created(req):
     serializer_movie = MovieSerializer(data=req.data)
     if serializer_movie.is_valid():
@@ -46,7 +49,6 @@ def movie_created(req):
     return Response(data=data,status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def movie_detail(req, pk):
     movie_Obj = Movie.objects.filter(pk=pk)
     if movie_Obj.exists():
@@ -58,7 +60,7 @@ def movie_detail(req, pk):
     return Response(data=serialized_Movie.data,status=status.HTTP_200_OK)
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+@permission_classes([UserCanDeleteMovie])
 def movie_delete(req,pk):
     response = {}
     try:
@@ -73,7 +75,6 @@ def movie_delete(req,pk):
     return Response(**response)
 
 @api_view(['PUT','PATCH'])
-@permission_classes([IsAuthenticated])
 def movie_update(req,pk):
     try:
         movie = Movie.objects.get(pk=pk)
