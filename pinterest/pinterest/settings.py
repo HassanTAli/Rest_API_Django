@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'pinterest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hassan',
+        'NAME': 'restdjango',
         'USER': 'hassan',
         'PASSWORD': 'hassan',
         'HOST':'localhost',
@@ -135,3 +135,5 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.TokenAuthentication'],
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated']
 }
+
+AUTH_USER_MODEL = 'accounts.User'

@@ -1,13 +1,15 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     password_confrim = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'password_confrim')
+        fields = ('email','mobile', 'profile_image' , 'username', 'password', 'password_confrim')
 
     def save(self, **kwargs):
         # print(self.validated_data)
@@ -19,7 +21,8 @@ class UserSerializer(serializers.ModelSerializer):
             )
         user = User(
                 email=self.validated_data.get('email'),
-                username=self.validated_data.get('username')
+                username=self.validated_data.get('username'),
+                mobile=self.validated_data.get('mobile')
                 )
         
         

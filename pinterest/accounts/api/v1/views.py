@@ -16,10 +16,7 @@ def signup(req):
     if user_serialized.is_valid():
         user_serialized.save()
         data['data'] = {
-            'user': {
-                'email': user_serialized.data.get('email'),
-                'username': user_serialized.data.get('username')
-            },
+            'user': user_serialized.data,
             'token': Token.objects.get(user__username=user_serialized.data.get('username')).key,
             'message': 'Created'
         }
